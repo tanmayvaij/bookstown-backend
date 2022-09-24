@@ -7,7 +7,7 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 
-
+app.use(require('./routes/auth'))
 
 app.listen(process.env.PORT, () => {
     console.log('server started successfully')
