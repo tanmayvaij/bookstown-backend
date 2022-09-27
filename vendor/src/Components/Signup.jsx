@@ -1,6 +1,9 @@
 import { useState } from "react"
+import { GlobalStates } from "../Context"
 
 const Signup = () => {
+
+    const { SERVER, setToken } = GlobalStates();
 
     const [ state, setState ] = useState({
         name: "", 
@@ -9,6 +12,26 @@ const Signup = () => {
         password: "",
         cpassword: ""
     })
+
+    const recieveToken = async () => {
+
+        const res = await fetch(`${SERVER}/api/auth/signup`, {
+            method: "POST",
+            mode: "cors",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(state)
+        })
+        const data = await res.json()
+        
+        if (data.status == true) {
+            setToken(data.token) 
+            localStorage.setItem('token', data.token)
+        }
+        else alert(data.message)
+
+        setState({name: "",email: "",number: "",password: "",cpassword: ""})
+
+    }
 
     return (
         <div className="mx-2">
@@ -83,7 +106,7 @@ const Signup = () => {
                         </div>
 
                         <div className="text-center mb-4">
-                            <button type="button" className="btn btn-primary">Sign Up</button>
+                            <button onClick={recieveToken} type="button" className="btn btn-primary">Sign Up</button>
                         </div>
 
                     </div>
