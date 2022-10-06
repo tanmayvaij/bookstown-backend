@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const { hash, genSalt, compare } = require('bcrypt')
-const { sign } = require('jsonwebtoken')
+const { sign, verify } = require('jsonwebtoken')
 const Vendor = require('../models/Vendors')
 
 router.post("/api/auth/signup", async (req, res) => {
@@ -36,6 +36,18 @@ router.post("/api/auth/signin", async (req, res) => {
     const token = sign({_id: vendor._id}, process.env.SECRET_TOKEN)
 
     res.json({status:true, token})
+
+})
+
+router.post("/api/auth/user-details", async (req, res) => {
+
+    const { token } = req.body
+
+    const verified = verify(token, process.env.SECRET_TOKEN)
+
+    const user = await Vendor.findOne({_id: verified._id}, {password: 0})
+
+    res.json({user})
 
 })
 
