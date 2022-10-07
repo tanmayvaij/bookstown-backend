@@ -41,13 +41,13 @@ router.post("/api/auth/signin", async (req, res) => {
 
 router.post("/api/auth/user-details", async (req, res) => {
 
-    const { token } = req.body
+    const { local_token } = req.body
 
-    const verified = verify(token, process.env.SECRET_TOKEN)
+    const verified = verify(local_token, process.env.SECRET_TOKEN)
 
-    const user = await Vendor.findOne({_id: verified._id}, {password: 0})
+    const vendor = await Vendor.findOne({_id: verified._id}, {password: 0})
 
-    res.json({user})
+    res.json({vendor})
 
 })
 

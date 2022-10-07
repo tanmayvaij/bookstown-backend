@@ -4,33 +4,33 @@ const Context = createContext()
 
 const MainContext = ({ children }) => {
 
-    const SERVER = "http://localhost:6000"
+    const SERVER = "http://localhost:5000"
     const [ token, setToken ] = useState();
-    const [ user, setUser ] = useState();
+    const [ vendor, setVendor ] = useState();
 
-    const getUserDetails = async () => {
+    const getUserDetails = async (local_token) => {
+
+        setToken(local_token)
 
         const res = await fetch(`${SERVER}/api/auth/user-details`, {
             method: "POST",
             mode: "cors",
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({token})
+            body: JSON.stringify({local_token})
         })
 
         const data = await res.json()
-        console.log(data)
+        setVendor(data.vendor)
 
     }
 
     useEffect(() => {
-        setToken(localStorage.getItem("token"))
-        if (token) {
-            getUserDetails()
-        }
+        const local_token = localStorage.getItem("token")
+        if ( local_token ) getUserDetails(local_token)
     }, [])
 
     return (
-        <Context.Provider value={{ SERVER, token, setToken, user }} >
+        <Context.Provider value={{ SERVER, token, setToken, vendor }} >
             { children }
         </Context.Provider>
     )

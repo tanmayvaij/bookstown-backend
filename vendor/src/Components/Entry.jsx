@@ -1,30 +1,45 @@
 import { useState } from "react";
+import { GlobalStates } from "../Context";
 
 const Entry = () => {
 
+    const { SERVER, vendor } = GlobalStates()
+
     const [ state, setState ] = useState({
-        name: "",
+        product: "",
         price: ""
     })
 
-    const [file, setFile] = useState(null);
+    const [image, setImage] = useState(null);
 
     const fileSet = async (e) => {
         const reader = new FileReader()
         reader.readAsDataURL(e.target.files[0])
-        reader.onload = () => setFile(reader.result)
+        reader.onload = () => setImage(reader.result)
+    }
+
+    const addProduct = async () => {
+        
+        const res = await fetch(`${SERVER}/api/products/list_products`, {
+            method: "POST",
+            mode: "cors",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({...state, image, vendorid: vendor._id})
+        })
+        
+        const data = await res.json()
+        
     }
 
     return (
         <div>
-            <img src={file} alt="" />
             <div class="mb-3">
                 <label class="form-label">Product Name</label>
                 <input 
                     type="text" 
                     class="form-control" 
-                    name="name"
-                    value={state.name}
+                    name="product"
+                    value={state.product}
                     onChange={(e)=>setState({ ...state, [e.target.name]: e.target.value })}
                 />
             </div>
@@ -47,7 +62,7 @@ const Entry = () => {
                     onChange={(e)=>fileSet(e)}
                 />
             </div>
-            <button class="btn btn-primary">Submit</button>
+            <button onClick={addProduct} class="btn btn-primary">Submit</button>
         </div>
     )
 }
