@@ -2,12 +2,15 @@ import express from "express"
 import { config } from "dotenv"
 import connectDB from "./db"
 
-import sellerRouter from "./routes/Seller"
+import sellerRouter from "./routes/ListBook"
 
 config()
 
 const app = express()
 const PORT = (process.env.PORT || 5000) as number
+
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
 
 app.use("/api/book", sellerRouter)
 

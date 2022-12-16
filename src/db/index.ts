@@ -2,10 +2,14 @@ import { connect, set } from "mongoose"
 
 set('strictQuery', true)
 
-const connectDB = (): void => {
-    return connect(process.env.MONGO_URI as string, () => {
-        console.log("Connected to database successfully")
-    })
+const connectDB = () => {
+    connect(process.env.MONGO_URI as string)
+        .then(()=>{
+            console.log('success')
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
 }
 
 export default connectDB
