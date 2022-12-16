@@ -2,17 +2,21 @@ import { Schema, model } from "mongoose"
 
 const listedBookSchema = new Schema({
     
-    book_id: {
+    bookname: {
         type: String,
         required: true
     },
-    bookname: {
+    desc: {
         type: String,
         required: true
     },
     price: {
         type: Number,
         required: true
+    },
+    image: {
+        data: Buffer,
+        contentType: String
     }
 
 })
