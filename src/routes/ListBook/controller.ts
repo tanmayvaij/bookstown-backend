@@ -1,15 +1,6 @@
 import { Request, Response } from "express"
 import listBook from "./schema"
-import multer from "multer"
-
-const Storage = multer.diskStorage({
-    destination: "./src/uploads",
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + file.originalname)
-    }
-})
-
-const upload = multer({ storage: Storage }).single("imageFile")
+import { upload } from "../../storage"
 
 const handleListBook = (req: Request, res: Response) => {
 
