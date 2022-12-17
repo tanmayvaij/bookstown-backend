@@ -3,7 +3,7 @@ import listBook from "./schema"
 import multer from "multer"
 
 const Storage = multer.diskStorage({
-    destination: "./uploads",
+    destination: "./src/uploads",
     filename: (req, file, cb) => {
         cb(null, Date.now() + file.originalname)
     }
