@@ -1,8 +1,9 @@
 import express from "express"
 import { config } from "dotenv"
-import connectDB from "./db"
+import path from "path"
+import connectDB from "./config/db"
 
-import sellerRouter from "./routes/ListBook"
+import ListBook from "./routes/ListBook"
 
 config()
 
@@ -11,8 +12,9 @@ const PORT = (process.env.PORT || 5000) as number
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
+app.use('/static', express.static(path.join(__dirname, 'uploads')))
 
-app.use("/api/book", sellerRouter)
+app.use("/api/book", ListBook)
 
 const start = async () => {
 

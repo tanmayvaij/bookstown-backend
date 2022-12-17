@@ -10,6 +10,4 @@ pnpm-lock.yaml
 # Ignore environment files
 .env
 
-# Ignore files in storage except index.ts
-src/storage/*
-!src/storage/index.ts
+src/uploads/*

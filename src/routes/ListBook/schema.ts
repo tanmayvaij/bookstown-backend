@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose"
 
-const listedBookSchema = new Schema({
+export const ListedBookSchema = model('listedBook', new Schema({
     
     bookname: {
         type: String,
@@ -14,11 +14,9 @@ const listedBookSchema = new Schema({
         type: Number,
         required: true
     },
-    image: {
-        data: Buffer,
-        contentType: String
+    image_url: {
+        type: String,
+        required: true
     }
 
-})
-
-export default model('listedBook', listedBookSchema)
+}))
