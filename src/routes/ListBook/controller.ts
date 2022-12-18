@@ -12,6 +12,6 @@ export const handleListBook = async (req: Request, res: Response) => {
 
     const savedBook = await book.save()
 
-    res.status(200).json(savedBook)
+    res.status(200).json({ book: savedBook })
 
 }
