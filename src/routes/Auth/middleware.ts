@@ -53,6 +53,6 @@ export const validateToken = (req: Request, res: Response, next: NextFunction) =
 
     }
 
-    catch (err) { return res.json({ success: false, message: err }) }
+    catch (err) { res.json({ success: false, message: err }) }
 
 }
