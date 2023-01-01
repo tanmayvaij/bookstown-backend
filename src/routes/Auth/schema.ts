@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose"
 
-export const SellerSchema = model("seller", new Schema({
+// model for users
+export const UserSchema = model("user", new Schema({
 
     name: {
         type: String,
@@ -22,6 +23,11 @@ export const SellerSchema = model("seller", new Schema({
     password: {
         type: String,
         required: true
+    },
+    account_type: {
+        type: String,
+        required: true,
+        enum: ['seller', 'buyer']
     }
 
 }))

@@ -1,33 +1,33 @@
 import { Request, Response } from "express"
 import { sign } from "jsonwebtoken"
-import { SellerSchema } from "./schema"
+import { UserSchema } from "./schema"
 import { compare } from "bcrypt"
 
 
-// handler for seller signup 
+// handler for user signup 
 export const handleSignUp = async (req: Request, res: Response) => {
 
-    // fetching seller details
-    const { name, email, number, address, password } = req.body
+    // fetching user details
+    const { name, email, number, address, password, account_type } = req.body
 
     // checking if fields are empty or not. Returning error message if fields are empty
-    if ( name == "" || email == "" || number == "" || address == "" ) 
+    if ( name == "" || email == "" || number == "" || address == "" || account_type == "" ) 
         return res.json({ success: false, message: "Required fields missing" })
 
     // checking if user with the same email exists or not. Returning error if a user with same email already exists
-    const sellerExists = await SellerSchema.findOne({ email })
-    if ( sellerExists ) return res.json({ success: false, message: "Seller with same email already exists" })
+    const userExists = await UserSchema.findOne({ email })
+    if ( userExists ) return res.json({ success: false, message: "user with same email already exists" })
 
     try {
 
         // Saving details to database
-        const seller = await SellerSchema.create({ name, email, number, address, password })
+        const user = await UserSchema.create({ name, email, number, address, password, account_type })
 
         // getting doc id
-        const id = seller.toObject()._id.toString()
+        const id = user.toObject()._id.toString()
 
         // creating payload object
-        const payload = { id, name, email, number, address }
+        const payload = { id, name, email, number, address, account_type }
 
         // creating token
         const authtoken = sign(payload, process.env.JWT_SECRET as string)
@@ -42,7 +42,7 @@ export const handleSignUp = async (req: Request, res: Response) => {
 }
 
 
-// handler for seller signin
+// handler for user signin
 export const handleSignIn = async (req: Request, res: Response) => {
 
     // getting email, password from user
@@ -52,23 +52,33 @@ export const handleSignIn = async (req: Request, res: Response) => {
     if ( email == "" || password == "" ) return res.json({ success: false, message: "Missing fields" })
 
     // checking if user exists or not, if not then showing error message
-    const seller = await SellerSchema.findOne({ email })
-    if (!seller) return res.json({ success: false, message: "Invalid Credentials" })
+    const user = await UserSchema.findOne({ email })
+    if (!user) return res.json({ success: false, message: "Invalid Credentials" })
 
     // checking if password is correct or not. Returning error message if password is wrong
-    const match = await compare(password, seller.password)
+    const match = await compare(password, user.password)
     if (!match) return res.json({ success: false, message: "Invalid Credentials" })
 
-    // getting seller details
-    const { _id, name, number, address } = seller
+    // getting user details
+    const { _id, name, number, address, account_type } = user
 
     // creating payload
-    const payload = { _id, name, email, number, address }
+    const payload = { _id, name, email, number, address, account_type }
 
     // generating token
     const authtoken = sign(payload, process.env.JWT_SECRET as string)
 
     // sending token
     res.json({ success: true, authtoken })
+
+}
+
+
+// handler for getting user details
+export const handleGetUser = (req: Request, res: Response) => {
+
+    const user = req.user
+
+    res.json({ user })
 
 }

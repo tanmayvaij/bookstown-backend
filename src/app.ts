@@ -20,14 +20,12 @@ app.use('/static', express.static(path.join(__dirname, 'uploads')))
 
 // Importing routers from ./routes
 import ListBookRouter from "./routes/ListBook"
-import SellerAuthRouter from "./routes/SellerAuth"
-import BuyerAuthRouter from "./routes/BuyerAuth"
+import AuthRouter from "./routes/Auth"
 
 
 // Using routers
 app.use("/api/book", ListBookRouter)
-app.use("/api/seller-auth", SellerAuthRouter)
-app.use("/api/buyer-auth", BuyerAuthRouter)
+app.use("/api/auth", AuthRouter)
 
 
 // Starting the server
